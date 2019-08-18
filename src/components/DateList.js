@@ -21,14 +21,6 @@ class DateList extends React.Component {
         this.removeTimeOut = this.removeTimeOut.bind(this)  
     }
 
-    removeTime(data) {
-        localStorage.removeItem(data)
-    }
-
-    getTime(data) {
-        return localStorage.getItem(data)
-    }
-
     displayTime(time) {
         if (time) {
             return new Date(time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
@@ -95,7 +87,7 @@ class DateList extends React.Component {
 
     removeTimeIn() {
         
-        if (this.state.in) {
+        if (this.state.out) {
             return
         }
         
@@ -109,12 +101,13 @@ class DateList extends React.Component {
     }
 
     removeTimeOut() {
-        this.updateTotalTime(this.state.in, this.state.in)
+        // this.updateTotalTime(this.state.in, this.state.in)
         this.setState(prevState => {
             return {
                 displayOut: null,
                 out: null,
-                setOutClass: ''
+                setOutClass: '',
+                rendered: this.getRendered(this.state.in, new Date()),
             }
         })
     }
@@ -130,8 +123,9 @@ class DateList extends React.Component {
     }
 
     componentDidMount() {
-        let data = JSON.parse(localStorage.getItem('time-record'))[this.props.item]
-        if (data) {
+        let stored = localStorage.getItem('time-record')
+        if (stored) {
+            let data = JSON.parse(stored)[this.props.item]
             this.setState({
                 in: data.in,
                 out: data.out,
@@ -150,7 +144,7 @@ class DateList extends React.Component {
 
         if (this.state.rendered) {
             rendered = <p className="mt-0 mb-0 text-center label-rendered">rendered: {this.state.rendered}</p>
-        } 
+        }
 
         return (
             <div className="flex-child">

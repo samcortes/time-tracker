@@ -14,8 +14,11 @@ class Calendar extends Component {
             reset: false,
             remainingHour: 0,
             remainingMins: 0,
-            requiredMins: 45*60
+            requiredMins: 45*60,
+            reset: false,
         }
+
+        this.resetTracker = this.resetTracker.bind(this);
     }
 
     callbackTotalTime = (totalMins) => {
@@ -44,7 +47,15 @@ class Calendar extends Component {
             week.push(day);
         }
         return week;
-    } 
+    }
+
+    resetTracker() {
+        this.setState(prevState => {
+            return {
+                reset: true,
+            }
+        })
+    }
 
     render() {
         const daysList = this.state.week.map(item =>  <DateList callbackTotalTime={this.callbackTotalTime} key={item} item={item} />)
@@ -55,6 +66,7 @@ class Calendar extends Component {
                     <p className="mt-0 mb-0 label-total">total</p>
                     <p className="mt-0 mb-0 clock-remaining">{this.state.remainingHour}:{this.state.remainingMins}</p>
                     <p className="mt-0 mb-0 label-remaining">remaining</p>
+                    {/* <button onClick={this.resetTracker}>Reset</button> */}
                 </div>
                 {daysList}
             </div>
