@@ -5,26 +5,20 @@ class DateList extends React.Component {
 
     constructor(props) {
         super(props)
-        
-        let timeIn = this.getTime("in-" + this.props.item)
-        let timeOut = this.getTime("out-" + this.props.item)
-
         this.state = {
-            in: timeIn,
-            out: timeOut,
-            displayIn: this.displayTime(timeIn),
-            displayOut: this.displayTime(timeOut),
-            setInClass: timeIn ? 'time-set' : '',
-            setOutClass: timeOut ? 'time-set' : '',
+            in: null,
+            out: null,
+            displayIn: null,
+            displayOut: null,
+            setInClass: null,
+            setOutClass: null,
             total: 0,
-            rendered: this.getRendered(timeIn, timeOut),
+            rendered: null,
         }
         this.setTimeIn = this.setTimeIn.bind(this)
         this.setTimeOut = this.setTimeOut.bind(this)
         this.removeTimeIn = this.removeTimeIn.bind(this)
-        this.removeTimeOut = this.removeTimeOut.bind(this)
-
-        this.getDiff(timeIn, timeOut)
+        this.removeTimeOut = this.removeTimeOut.bind(this)  
     }
 
     removeTime(data) {
@@ -51,9 +45,7 @@ class DateList extends React.Component {
         }
     }
 
-    getDiff(timeIn, timeOut) {
-        console.log('timeIn', timeIn)
-        console.log('timeOut', timeOut)
+    updateTotalTime(timeIn, timeOut) {
         if (timeIn && timeOut) {
             var diff = new Date(timeOut) - new Date(timeIn)
             var totalMins = Math.round(diff / 60000)
@@ -68,8 +60,7 @@ class DateList extends React.Component {
         }
 
         let now = new Date()
-        this.getDiff(now, this.state.out)
-        localStorage.setItem("in-" + this.props.item, now)
+        this.updateTotalTime(now, this.state.out)
         
         this.setState(prevState => {
             return {
@@ -89,8 +80,7 @@ class DateList extends React.Component {
         }
 
         let now = new Date()
-        this.getDiff(this.state.in, now)
-        localStorage.setItem("out-" + this.props.item, now)
+        this.updateTotalTime(this.state.in, now)
         
         this.setState(prevState => {
             return {
@@ -104,7 +94,11 @@ class DateList extends React.Component {
     }
 
     removeTimeIn() {
-        this.removeTime("in-" + this.props.item)
+        
+        if (this.state.in) {
+            return
+        }
+        
         this.setState(prevState => {
             return {
                 in: null,
@@ -115,7 +109,7 @@ class DateList extends React.Component {
     }
 
     removeTimeOut() {
-        this.removeTime("out-" + this.props.item)
+        this.updateTotalTime(this.state.in, this.state.in)
         this.setState(prevState => {
             return {
                 displayOut: null,
@@ -124,9 +118,34 @@ class DateList extends React.Component {
             }
         })
     }
+
+    componentDidUpdate() {
+        let data = JSON.parse(localStorage.getItem('time-record'))
+
+        data[this.props.item] = {}
+        data[this.props.item]['in'] = this.state.in
+        data[this.props.item]['out'] = this.state.out
+    
+        localStorage.setItem('time-record', JSON.stringify(data))
+    }
+
+    componentDidMount() {
+        let data = JSON.parse(localStorage.getItem('time-record'))[this.props.item]
+        if (data) {
+            this.setState({
+                in: data.in,
+                out: data.out,
+                displayIn: this.displayTime(data.in),
+                displayOut: this.displayTime(data.out),
+                setInClass: data.in ? 'time-set' : '',
+                setOutClass: data.out ? 'time-set' : '',
+                rendered: this.getRendered(data.in, data.out),
+            })
+            this.updateTotalTime(data.in, data.out)
+        }
+    }
     
     render() {
-
         let rendered;
 
         if (this.state.rendered) {
