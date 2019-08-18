@@ -1,4 +1,5 @@
 body {
+  background: #263238;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
@@ -10,4 +11,80 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+header {
+  border-bottom: 1px solid #eceff1;
+  color: #eceff1;
+  padding: 19px 30px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.calendar-container {
+  display: flex;
+  flex-direction: initial;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+
+.flex-child {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  background: #37474f;
+  border: 1px solid #eceff1;
+  border-radius: 8px;
+  margin: 10px;
+  color: #e8eaed;
+  padding: 10px;
+  width: 35%;
+}
+
+.total-time {
+  background: transparent;
+  color: #fff;
+  font-size: 42px;
+  text-align: center;
+}
+
+.btn-reset,
+.btn-time-in-out {
+  height: 40px;
+  background: transparent;
+  border: 1px solid #eceff1;
+  color: #fff;
+  border-radius: 40px;
+  width: 100%;
+}
+
+.time-set {
+  background: #eceff1;
+  color: #333;
+}
+
+.text-center {
+  text-align: center;
+}
+.mt-0 {
+  margin-top: 0;
+}
+
+.mb-0 {
+  margin-bottom: 0;
+}
+
+.mb-10 {
+  margin-bottom: 10px;
+}
+
+.label-remaining,
+.clock-remaining {
+  color: #4f5b62;
+}
+
+.label-rendered,
+.label-remaining,
+.label-total {
+  font-size: 12px;
 }
