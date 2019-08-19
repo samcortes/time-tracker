@@ -113,7 +113,7 @@ class DateList extends React.Component {
     }
 
     componentDidUpdate() {
-        let data = JSON.parse(localStorage.getItem('time-record'))
+        let data = JSON.parse(localStorage.getItem('time-record')) || {}
 
         data[this.props.item] = {}
         data[this.props.item]['in'] = this.state.in
@@ -126,16 +126,18 @@ class DateList extends React.Component {
         let stored = localStorage.getItem('time-record')
         if (stored) {
             let data = JSON.parse(stored)[this.props.item]
-            this.setState({
-                in: data.in,
-                out: data.out,
-                displayIn: this.displayTime(data.in),
-                displayOut: this.displayTime(data.out),
-                setInClass: data.in ? 'time-set' : '',
-                setOutClass: data.out ? 'time-set' : '',
-                rendered: this.getRendered(data.in, data.out),
-            })
-            this.updateTotalTime(data.in, data.out)
+            if (data) {
+                this.setState({
+                    in: data.in,
+                    out: data.out,
+                    displayIn: this.displayTime(data.in),
+                    displayOut: this.displayTime(data.out),
+                    setInClass: data.in ? 'time-set' : '',
+                    setOutClass: data.out ? 'time-set' : '',
+                    rendered: this.getRendered(data.in, data.out),
+                })
+                this.updateTotalTime(data.in, data.out)
+            }
         }
     }
     
