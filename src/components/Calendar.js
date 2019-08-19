@@ -16,6 +16,7 @@ class Calendar extends Component {
             remainingMins: 0,
             requiredMins: 45*60,
             reset: false,
+            key: this.generateRandomKey(),
         }
 
         this.resetTracker = this.resetTracker.bind(this);
@@ -50,15 +51,20 @@ class Calendar extends Component {
     }
 
     resetTracker() {
+        localStorage.removeItem('time-record')
         this.setState(prevState => {
             return {
-                reset: true,
+                key: this.generateRandomKey(),
             }
         })
     }
 
+    generateRandomKey() {
+        return Math.random().toString(36).substr(2, 5)
+    }
+
     render() {
-        const daysList = this.state.week.map(item =>  <DateList callbackTotalTime={this.callbackTotalTime} key={item} item={item} />)
+        const daysList = this.state.week.map(item =>  <DateList callbackTotalTime={this.callbackTotalTime} key={this.state.key + "-" + item} item={item} />)
         return (
             <div className="calendar-container">
                 <div className="flex-child total-time">
@@ -66,7 +72,7 @@ class Calendar extends Component {
                     <p className="mt-0 mb-0 label-total">total</p>
                     <p className="mt-0 mb-0 clock-remaining">{this.state.remainingHour}:{this.state.remainingMins}</p>
                     <p className="mt-0 mb-0 label-remaining">remaining</p>
-                    {/* <button onClick={this.resetTracker}>Reset</button> */}
+                    <i className="fa fa-refresh btn-reset" aria-hidden="true" onClick={this.resetTracker}></i>
                 </div>
                 {daysList}
             </div>
