@@ -14,6 +14,8 @@ class DateList extends React.Component {
             setOutClass: null,
             total: 0,
             rendered: null,
+            intervalId: null,
+            currentCount: 0,
         }
         this.setTimeIn = this.setTimeIn.bind(this)
         this.setTimeOut = this.setTimeOut.bind(this)
@@ -26,15 +28,6 @@ class DateList extends React.Component {
             return new Date(time).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
         }
         return null
-    }
-
-    getRendered(timeIn, timeOut) {
-        if (timeIn && !timeOut) {
-            let diff = new Date() - new Date(timeIn)
-            let totalMins = Math.round(diff / 60000)
-            let time = helpers.makeMindReadable(totalMins);
-            return time.hr + ":" + time.min;
-        }
     }
 
     updateTotalTime(timeIn, timeOut) {
@@ -59,7 +52,7 @@ class DateList extends React.Component {
                 in: now,
                 displayIn: this.displayTime(now),
                 setInClass: 'time-set',
-                rendered: this.getRendered(now)
+                currentCount: new Date() - now
             }
         })
 
@@ -101,13 +94,12 @@ class DateList extends React.Component {
     }
 
     removeTimeOut() {
-        // this.updateTotalTime(this.state.in, this.state.in)
         this.setState(prevState => {
             return {
                 displayOut: null,
                 out: null,
                 setOutClass: '',
-                rendered: this.getRendered(this.state.in, new Date()),
+                currentCount: 0,
             }
         })
     }
@@ -122,8 +114,14 @@ class DateList extends React.Component {
         localStorage.setItem('time-record', JSON.stringify(data))
     }
 
+    componentWillUnmount() {
+        clearInterval(this.state.intervalId)
+    }
+
     componentDidMount() {
         let stored = localStorage.getItem('time-record')
+        var interval = setInterval(this.timer.bind(this), 1000)
+
         if (stored) {
             let data = JSON.parse(stored)[this.props.item]
             if (data) {
@@ -134,17 +132,29 @@ class DateList extends React.Component {
                     displayOut: this.displayTime(data.out),
                     setInClass: data.in ? 'time-set' : '',
                     setOutClass: data.out ? 'time-set' : '',
-                    rendered: this.getRendered(data.in, data.out),
+                    currentCount: new Date() - new Date(data.in),
+                    intervalId: interval
                 })
+
                 this.updateTotalTime(data.in, data.out)
             }
+        }
+    }
+
+    timer() {
+        if (this.state.currentCount) {
+            let increment = this.state.currentCount + 1000
+            let totalMins = Math.round(increment / 60000)
+            let time = helpers.convertMinutes(totalMins)
+            this.setState({currentCount: increment})
+            this.setState({rendered: time.hr + ":" + time.min})
         }
     }
     
     render() {
         let rendered;
 
-        if (this.state.rendered) {
+        if (this.state.rendered && !this.state.out) {
             rendered = <p className="mt-0 mb-0 text-center label-rendered">rendered: {this.state.rendered}</p>
         }
 

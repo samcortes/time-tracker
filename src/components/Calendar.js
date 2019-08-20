@@ -25,9 +25,9 @@ class Calendar extends Component {
     callbackTotalTime = (totalMins) => {
         this.setState(prevState => {
             let newTotal = prevState.total + totalMins
-            let parsedTotal = helpers.makeMindReadable(newTotal)
+            let parsedTotal = helpers.convertMinutes(newTotal)
             let remaining = this.state.requiredMins - newTotal
-            let parsedRemaning = helpers.makeMindReadable(remaining)
+            let parsedRemaning = helpers.convertMinutes(remaining)
 
             return {
                 total: newTotal,

@@ -1,5 +1,5 @@
 const helpers = {
-    makeMindReadable: function(mins) {
+    convertMinutes: function(mins) {
         var hours = (mins / 60);
         var rhours = Math.floor(hours);
         var minutes = (hours - rhours) * 60;
