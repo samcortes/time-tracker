@@ -154,7 +154,6 @@ class DateList extends React.Component {
     
     render() {
         let rendered;
-
         if (this.state.rendered && !this.state.out && this.state.in) {
             rendered = <p className="mt-0 mb-0 text-center label-rendered">rendered: {this.state.rendered}</p>
         }
