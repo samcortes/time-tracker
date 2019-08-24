@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDom from 'react-dom';
 import App from './components/App';
-import 'font-awesome/css/font-awesome.min.css';
 import './index.css'
 
 ReactDom.render(
