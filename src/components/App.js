@@ -14,7 +14,7 @@ class App extends Component {
                 <div className="App-content">
                     <div className="App-header">
                         <p className="mb-0 mt-0">Daily Time Tracker</p>
-                        <a href="https://www.samcortes.com" className="nav-more">
+                        <a href="https://www.samanthaio.com" className="nav-more">
                             more from sam&nbsp;
                             <i className="fa fa-angle-right"></i>
                         </a>

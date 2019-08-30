@@ -52,6 +52,7 @@ class DateList extends React.Component {
                 in: now,
                 displayIn: this.displayTime(now),
                 setInClass: 'time-set',
+                setOutClass: 'time-running',
                 currentCount: new Date() - now
             }
         })
@@ -125,14 +126,24 @@ class DateList extends React.Component {
 
         if (stored) {
             let data = JSON.parse(stored)[this.props.item]
+            let setOutClass = '';
             if (data) {
+
+                if (data.out) {
+                    setOutClass = 'time-set';
+                }
+
+                if (data.in && !data.out) {
+                    setOutClass = 'time-running';
+                }
+
                 this.setState({
                     in: data.in,
                     out: data.out,
                     displayIn: this.displayTime(data.in),
                     displayOut: this.displayTime(data.out),
                     setInClass: data.in ? 'time-set' : '',
-                    setOutClass: data.out ? 'time-set' : '',
+                    setOutClass: setOutClass,
                     currentCount: new Date() - new Date(data.in),
                     intervalId: interval
                 })
@@ -155,23 +166,27 @@ class DateList extends React.Component {
     render() {
         let rendered;
         if (this.state.rendered && !this.state.out && this.state.in) {
-            rendered = <p className="mt-0 mb-0 text-center label-rendered">rendered: {this.state.rendered}</p>
+            rendered = <p className="mt-0 text-center label-rendered">total in hours: {this.state.rendered}</p>
         }
 
         return (
             <div className="flex-child">
                 <p className="mt-0 text-center">{this.props.item}</p>
-                <button className={"mb-10 btn-time-in-out " + this.state.setInClass} 
-                        onClick={this.setTimeIn}
-                        onDoubleClick={this.removeTimeIn}>
-                        In {this.state.displayIn}
-                </button>
-                <button className={"mb-10 btn-time-in-out " + this.state.setOutClass} 
-                        onClick={this.setTimeOut}
-                        onDoubleClick={this.removeTimeOut}>
-                        Out {this.state.displayOut}
-                        {rendered}
-                </button>
+                {rendered}
+                <div className="Date-buttons">
+                    <button className={"mb-10 btn-time-in " + this.state.setInClass} 
+                            onClick={this.setTimeIn}
+                            onDoubleClick={this.removeTimeIn}>
+                            Clock in <br />{this.state.displayIn}
+                    </button>
+                    <button className={"mb-10 btn-time-out " + this.state.setOutClass} 
+                            onClick={this.setTimeOut}
+                            onDoubleClick={this.removeTimeOut}>
+                            Log work <br />{this.state.displayOut}
+                    </button>
+                    
+                </div>
+
                 
             </div>
         )

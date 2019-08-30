@@ -37,7 +37,7 @@
 
 .App-content {
   position: relative;
-  width: 480px;
+  max-width: 480px;
   margin: 0 auto;
 }
 
@@ -52,7 +52,7 @@
   display: flex;
   justify-content: center;
   flex-direction: column;
-  width: 35%;
+  width: 100%;
   margin: 10px;
   padding: 10px;
   border-radius: 8px;
@@ -69,13 +69,51 @@
   background: #000000b0;
 }
 
-.btn-time-in-out {
-  width: 100%;
-  height: 40px;
-  border-radius: 40px;
-  border: 1px solid #eceff1;
+.btn-time-in,
+.btn-time-out {
+  height: 50px;
+  border-radius: 10px;
+
+  position: relative;
+  font-size: 12px;
+  color: #FFFFFF;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+  overflow: hidden;
+  cursor: pointer;
+
+  &:after {
+    content: "";
+    background: #00000061;
+    display: block;
+    position: absolute;
+    padding-top: 300%;
+    padding-left: 350%;
+    margin-left: -20px!important;
+    margin-top: -120%;
+    opacity: 0;
+    transition: all 0.8s
+  }
+  
+  &:active:after {
+    padding: 0;
+    margin: 0;
+    opacity: 1;
+    transition: 0s
+  }
+}
+
+.btn-time-out {
+  background: rgb(142,142,147);
+  color: #fff;
+  border: 1px solid transparent;
+  opacity: 0.3;
+}
+
+.btn-time-in {
   background: transparent;
   color: #000;
+  border: 1px solid #eceff1;
 }
 
 .btn-reset {
@@ -86,8 +124,16 @@
 }
 
 .time-set {
-  color: #333;
-  background: #eceff1;
+  color: #fff;
+  background: #000000b0;
+  opacity: 1;
+}
+
+.time-running {
+  border-color: transparent;
+  color: #fff;
+  background: rgb(255,59,48);
+  opacity: 1;
 }
 
 .text-center {
@@ -118,7 +164,7 @@
 }
 
 .App-copyright {
-  position: fixed;
+  position: relative;
   bottom: 0;
   width: 100%;
   color: #fff;
@@ -133,5 +179,16 @@
   100% {
     transform: translateY(0);
     visibility: visible;
+  }
+}
+
+
+.Date-buttons {
+  display: flex;
+  flex-direction: row;
+
+  button {
+    width: 50%;
+    margin: 1%;
   }
 }
